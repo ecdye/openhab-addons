@@ -10,19 +10,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.saicismart.internal;
+package org.openhab.binding.froniuswattpilot.internal;
 
-import static org.openhab.binding.saicismart.internal.SAICiSMARTBindingConstants.*;
+import static org.openhab.binding.froniuswattpilot.internal.FroniusWattpilotBindingConstants.*;
 
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
-import org.openhab.core.i18n.LocaleProvider;
-import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.io.net.http.HttpClientFactory;
-import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.binding.BaseThingHandlerFactory;
@@ -33,22 +30,21 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * The {@link SAICiSMARTHandlerFactory} is responsible for creating things and thing
+ * The {@link FroniusWattpilotHandlerFactory} is responsible for creating things and thing
  * handlers.
  *
- * @author Markus Heberling - Initial contribution
+ * @author Florian Hotze - Initial contribution
  */
 @NonNullByDefault
-@Component(configurationPid = "binding.saicismart", service = ThingHandlerFactory.class)
-public class SAICiSMARTHandlerFactory extends BaseThingHandlerFactory {
+@Component(configurationPid = "binding.froniuswattpilot", service = ThingHandlerFactory.class)
+public class FroniusWattpilotHandlerFactory extends BaseThingHandlerFactory {
+    static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(THING_TYPE_WATTPILOT);
 
-    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(THING_TYPE_ACCOUNT, THING_TYPE_VEHICLE);
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
     @Activate
-    public SAICiSMARTHandlerFactory(final @Reference TranslationProvider translationProvider,
-            final @Reference LocaleProvider localeProvider, final @Reference HttpClientFactory httpClientFactory) {
-        this.httpClient = httpClientFactory.getCommonHttpClient();
+    public FroniusWattpilotHandlerFactory(@Reference final HttpClientFactory httpClientFactory) {
+        this.httpClient = httpClientFactory.createHttpClient("fronius-wattpilot");
     }
 
     @Override
@@ -60,10 +56,8 @@ public class SAICiSMARTHandlerFactory extends BaseThingHandlerFactory {
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (THING_TYPE_ACCOUNT.equals(thingTypeUID)) {
-            return new SAICiSMARTBridgeHandler((Bridge) thing, httpClient);
-        } else if (THING_TYPE_VEHICLE.equals(thingTypeUID)) {
-            return new SAICiSMARTHandler(thing);
+        if (THING_TYPE_WATTPILOT.equals(thingTypeUID)) {
+            return new FroniusWattpilotHandler(thing, httpClient);
         }
 
         return null;

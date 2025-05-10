@@ -10,21 +10,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.saicismart.internal;
+package org.openhab.binding.froniuswattpilot.internal;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * The {@link SAICiSMARTVehicleConfiguration} class contains fields mapping thing configuration parameters.
+ * The {@link FroniusWattpilotConfiguration} class contains fields mapping thing configuration parameters.
  *
- * @author Markus Heberling - Initial contribution
+ * @author Florian Hotze - Initial contribution
  */
 @NonNullByDefault
-public class SAICiSMARTVehicleConfiguration {
-
-    public String vin = "";
-
-    @Nullable
-    public String abrpUserToken;
+public class FroniusWattpilotConfiguration {
+    public String hostname = "";
+    public String password = "";
 }
